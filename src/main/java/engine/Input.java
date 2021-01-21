@@ -7,10 +7,13 @@ public class Input {
     private static boolean[] buttons = new boolean[GLFW.GLFW_GAMEPAD_BUTTON_LAST];
     private static double mouseX;
     private static double mouseY;
+    private static double scrollX;
+    private static double scrollY;
 
     private GLFWKeyCallback keyboard;
     private GLFWCursorPosCallback mouseMove;
     private GLFWMouseButtonCallback mouseButtons;
+    private GLFWScrollCallback mouseScroll;
 
     public Input() {
         // keyboard handler
@@ -35,6 +38,14 @@ public class Input {
                 buttons[button] = (action != GLFW.GLFW_RELEASE);
             }
         };
+
+        this.mouseScroll = new GLFWScrollCallback() {
+            @Override
+            public void invoke(long window, double offsetX, double offsetY) {
+                scrollX += offsetX;
+                scrollY += offsetY;
+            }
+        };
     }
 
     public static boolean isKeyDown(int key) {
@@ -53,6 +64,14 @@ public class Input {
         return mouseY;
     }
 
+    public static double getScrollX() {
+        return scrollX;
+    }
+
+    public static double getScrollY() {
+        return scrollY;
+    }
+
     public GLFWKeyCallback getKeyboardCallback() {
         return keyboard;
     }
@@ -65,9 +84,14 @@ public class Input {
         return mouseButtons;
     }
 
+    public GLFWScrollCallback getMouseScrollCallback() {
+        return mouseScroll;
+    }
+
     public void destroy() {
         keyboard.free();
         mouseMove.free();
         mouseButtons.free();
+        mouseScroll.free();
     }
 }

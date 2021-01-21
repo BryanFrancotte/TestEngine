@@ -19,15 +19,18 @@ public class MainComponent implements Runnable{
 
     public void init() {
         this.window = new Window();
+        this.window.setBackgroundColor(1.0f, 0.0f, 0.0f);
         this.window.create();
     }
 
     public void run() {
         this.init();
-        while(!this.window.shouldClose()) {
+        while(!this.window.shouldClose() && !Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) {
             this.update();
             this.render();
-            if(Input.isKeyDown(GLFW.GLFW_KEY_ESCAPE)) return;
+            if(Input.isKeyDown(GLFW.GLFW_KEY_F11)) {
+                window.setFullScreen(!window.isFullScreen());
+            }
         }
         this.window.destroy();
     }
@@ -36,6 +39,7 @@ public class MainComponent implements Runnable{
         this.window.update();
         if(Input.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
             System.out.println("X: " + Input.getMouseX() + ", Y: " + Input.getMouseY());
+            System.out.println("scrollX: " + Input.getScrollX() + ", scrollY: " + Input.getScrollY());
         }
     }
 

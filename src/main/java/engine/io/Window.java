@@ -1,5 +1,6 @@
-package engine;
+package engine.io;
 
+import engine.maths.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
@@ -13,10 +14,7 @@ public class Window {
     private String title;
     private long glfwWindow;
 
-    private float bgColorR;
-    private float bgColorG;
-    private float bgColorB;
-    private float bgColorA;
+    private Vector3f background = new Vector3f(0, 0, 0);
 
     private GLFWWindowSizeCallback sizeCallback;
     private boolean isResized;
@@ -29,7 +27,7 @@ public class Window {
 
     public Input input;
 
-    // public static engine.Window window = null;
+    // public static engine.io.Window window = null;
 
     public Window() {
         this.width = 1920;
@@ -104,7 +102,7 @@ public class Window {
             GL11.glViewport(0,0, width, height);
             this.isResized = false;
         }
-        GL11.glClearColor(this.bgColorR, this.bgColorG, this.bgColorB, this.bgColorA);
+        GL11.glClearColor(this.background.getX(), this.background.getY(), this.background.getZ(), 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GLFW.glfwPollEvents();
         this.frames++;
@@ -120,10 +118,7 @@ public class Window {
     }
 
     public void setBackgroundColor(float red, float green, float blue) {
-        this.bgColorR = red;
-        this.bgColorG = green;
-        this.bgColorB = blue;
-        this.bgColorA = 1.0f;
+        this.background.set(red, green, blue);
     }
 
     public boolean shouldClose() {

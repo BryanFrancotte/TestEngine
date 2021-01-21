@@ -1,13 +1,30 @@
 package Main;
 
-import engine.Input;
-import engine.Window;
+import engine.graphics.Mesh;
+import engine.graphics.Renderer;
+import engine.graphics.Shader;
+import engine.graphics.Vertex;
+import engine.io.Input;
+import engine.io.Window;
+import engine.maths.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 public class MainComponent implements Runnable{
 
     private Thread gameEngine;
     private Window window;
+    private Renderer renderer;
+    private Shader shader;
+
+    private Mesh mesh = new Mesh(new Vertex[] {
+            new Vertex(new Vector3f(-0.5f, 0.5f, 0.0f)),
+            new Vertex(new Vector3f(0.5f, 0.5f, 0.0f)),
+            new Vertex(new Vector3f(0.5f, -0.5f, 0.0f)),
+            new Vertex(new Vector3f(-0.5f, -0.5f, 0.0f))
+    }, new int[] {
+            0, 1, 2,
+            0, 3, 2
+    });
 
     public void start() {
         this.gameEngine = new Thread(this, "gameEngine");
@@ -19,8 +36,12 @@ public class MainComponent implements Runnable{
 
     public void init() {
         this.window = new Window();
+        this.shader = new Shader("/shaders/basicVertex.vs", "/shaders/basicFragment.fs");
+        this.renderer = new Renderer(this.shader);
         this.window.setBackgroundColor(1.0f, 0.0f, 0.0f);
         this.window.create();
+        this.mesh.create();
+        this.shader.create();
     }
 
     public void run() {
@@ -44,6 +65,7 @@ public class MainComponent implements Runnable{
     }
 
     public void render() {
+        this.renderer.renderMesh(this.mesh);
         this.window.swapBuffers();
     }
 

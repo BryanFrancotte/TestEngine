@@ -3,6 +3,7 @@ package Main;
 import engine.entites.Camera;
 import engine.entites.Entity;
 import engine.graphics.Loader;
+import engine.graphics.OBJLoader;
 import engine.graphics.Texture;
 import engine.models.MeshModel;
 import engine.graphics.Renderer;
@@ -12,6 +13,7 @@ import engine.io.Window;
 import engine.models.TexturedModel;
 import engine.shaders.StaticShader;
 import org.lwjgl.glfw.GLFW;
+import org.lwjglx.Sys;
 import org.lwjglx.util.vector.Vector3f;
 
 public class MainComponent implements Runnable{
@@ -28,85 +30,6 @@ public class MainComponent implements Runnable{
     private Entity entity;
     private Camera camera;
 
-    float[] vertices = {
-            -0.5f,0.5f,-0.5f,
-            -0.5f,-0.5f,-0.5f,
-            0.5f,-0.5f,-0.5f,
-            0.5f,0.5f,-0.5f,
-
-            -0.5f,0.5f,0.5f,
-            -0.5f,-0.5f,0.5f,
-            0.5f,-0.5f,0.5f,
-            0.5f,0.5f,0.5f,
-
-            0.5f,0.5f,-0.5f,
-            0.5f,-0.5f,-0.5f,
-            0.5f,-0.5f,0.5f,
-            0.5f,0.5f,0.5f,
-
-            -0.5f,0.5f,-0.5f,
-            -0.5f,-0.5f,-0.5f,
-            -0.5f,-0.5f,0.5f,
-            -0.5f,0.5f,0.5f,
-
-            -0.5f,0.5f,0.5f,
-            -0.5f,0.5f,-0.5f,
-            0.5f,0.5f,-0.5f,
-            0.5f,0.5f,0.5f,
-
-            -0.5f,-0.5f,0.5f,
-            -0.5f,-0.5f,-0.5f,
-            0.5f,-0.5f,-0.5f,
-            0.5f,-0.5f,0.5f
-
-    };
-
-    float[] textureCoords = {
-
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0,
-            0,0,
-            0,1,
-            1,1,
-            1,0
-
-
-    };
-
-    int[] indices = {
-            0,1,3,
-            3,1,2,
-            4,5,7,
-            7,5,6,
-            8,9,11,
-            11,9,10,
-            12,13,15,
-            15,13,14,
-            16,17,19,
-            19,17,18,
-            20,21,23,
-            23,21,22
-
-    };
-
     public void start() {
         this.gameEngine = new Thread(this, "gameEngine");
         this.gameEngine.start();
@@ -117,16 +40,17 @@ public class MainComponent implements Runnable{
 
     private void init() {
         this.window = new Window();
-        this.window.setBackgroundColor(1.0f, 0.0f, 0.0f);
+        this.window.setBackgroundColor(0.0f, 0.0f, 0.0f);
         this.window.create();
         this.loader = new Loader();
         this.shader = new StaticShader();
         this.renderer = new Renderer(this.window, this.shader);
 
-        this.model = this.loader.loadToVAO(vertices, textureCoords, indices);
-        this.texture = new Texture(this.loader.loadTexture("/textures/image.png"));
+        this.model = OBJLoader.loadObjModel("stall", this.loader);
+        System.out.println("Object Loaded");
+        this.texture = new Texture(this.loader.loadTexture("/textures/stallTexture.png"));
         this.staticModel = new TexturedModel(this.model, this.texture);
-        this.entity = new Entity(staticModel, new Vector3f(0, 0, -5), 0, 0, 0, 1);
+        this.entity = new Entity(staticModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
         this.camera = new Camera();
     }
 
@@ -151,7 +75,7 @@ public class MainComponent implements Runnable{
     }
 
     private void render() {
-        this.entity.increaseRotation(1,1,0);
+        this.entity.increaseRotation(0,1,0);
         camera.move();
         this.shader.start();
         this.shader.loadViewMatrix(camera);

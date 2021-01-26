@@ -9,8 +9,9 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-    private int width;
-    private int height;
+    // TODO: Check if this cause issue in the future?
+    private static int width;
+    private static int height;
     private String title;
     private long glfwWindow;
 
@@ -41,6 +42,10 @@ public class Window {
         this.height = height;
         this.title = title;
         GLFWErrorCallback.createPrint(System.err).set();
+    }
+
+    public static float getAspectRation() {
+        return (float) width/ (float) height;
     }
 
     public void create() {
@@ -131,14 +136,6 @@ public class Window {
 
     public int getHeight() {
         return this.height;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public long getGlfwWindow() {
-        return this.glfwWindow;
     }
 
     public boolean isFullScreen() {

@@ -3,31 +3,30 @@ package Main;
 import engine.entites.Camera;
 import engine.entites.Entity;
 import engine.entites.Light;
-import engine.graphics.Loader;
-import engine.graphics.OBJLoader;
-import engine.graphics.Texture;
+import engine.graphics.*;
 import engine.models.MeshModel;
-import engine.graphics.Renderer;
 import engine.io.Input;
 import engine.io.Window;
 
 import engine.models.TexturedModel;
-import engine.shaders.StaticShader;
 import org.lwjgl.glfw.GLFW;
 import org.lwjglx.util.vector.Vector3f;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MainComponent implements Runnable{
 
     private Thread gameEngine;
     private Window window;
     private Loader loader;
-    private Renderer renderer;
-    private StaticShader shader;
+    private MasterRenderer renderer;
 
     private MeshModel model;
-    private Texture texture;
     private TexturedModel staticModel;
     private Entity entity;
+    private List<Entity> allCubes;
     private Light light;
     private Camera camera;
 
@@ -41,17 +40,24 @@ public class MainComponent implements Runnable{
 
     private void init() {
         this.window = new Window();
-        this.window.setBackgroundColor(0.0f, 0.0f, 0.0f);
+        this.window.setBackgroundColor(1.0f, 0.5f, 0.0f);
         this.window.create();
         this.loader = new Loader();
-        this.shader = new StaticShader();
-        this.renderer = new Renderer(this.window, this.shader);
+        this.renderer = new MasterRenderer();
 
-        this.model = OBJLoader.loadObjModel("dragon", this.loader);
-        this.texture = new Texture(this.loader.loadTexture("/textures/blue.png"));
-        this.staticModel = new TexturedModel(this.model, this.texture);
-        this.entity = new Entity(staticModel, new Vector3f(0, -4, -25), 0, 0, 0, 1);
-        this.light = new Light(new engine.maths.Vector3f(0,0, -20), new engine.maths.Vector3f(1, 1, 1));
+        this.model = OBJLoader.loadObjModel("cube", this.loader);
+        this.staticModel = new TexturedModel(this.model, new Texture(this.loader.loadTexture("/textures/blue.png")));
+        this.allCubes = new ArrayList<>();
+        this.staticModel.getTexture().setShineDamper(100000);
+        this.staticModel.getTexture().setReflectivity(0);
+        Random random = new Random();
+        for(int i = 0; i < 200; i++) {
+            float x = random.nextFloat() * 100 - 50;
+            float y = random.nextFloat() * 100 - 50;
+            float z = random.nextFloat() * -300;
+            this.allCubes.add(new Entity(staticModel, new Vector3f(x, y, z), random.nextFloat() * 180f, random.nextFloat() * 180f, 0f, 1f));
+        }
+        this.light = new Light(new engine.maths.Vector3f(3000,2000, 3000), new engine.maths.Vector3f(1, 1, 1));
         this.camera = new Camera();
     }
 
@@ -76,18 +82,16 @@ public class MainComponent implements Runnable{
     }
 
     private void render() {
-        this.entity.increaseRotation(0,1.0f,0);
         camera.move();
-        this.shader.start();
-        this.shader.loadLight(light);
-        this.shader.loadViewMatrix(camera);
-        this.renderer.render(this.entity, this.shader);
-        this.shader.stop();
+        for(Entity cube : this.allCubes) {
+            this.renderer.processEntity(cube);
+        }
+        this.renderer.render(light, camera);
         this.window.swapBuffers();
     }
 
     private void close() {
-        this.shader.destroy();
+        this.renderer.destroy();
         this.loader.destroy();
         this.window.destroy();
     }

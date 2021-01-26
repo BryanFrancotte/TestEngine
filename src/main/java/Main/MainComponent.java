@@ -2,6 +2,7 @@ package Main;
 
 import engine.entites.Camera;
 import engine.entites.Entity;
+import engine.entites.Light;
 import engine.graphics.Loader;
 import engine.graphics.OBJLoader;
 import engine.graphics.Texture;
@@ -13,7 +14,6 @@ import engine.io.Window;
 import engine.models.TexturedModel;
 import engine.shaders.StaticShader;
 import org.lwjgl.glfw.GLFW;
-import org.lwjglx.Sys;
 import org.lwjglx.util.vector.Vector3f;
 
 public class MainComponent implements Runnable{
@@ -28,6 +28,7 @@ public class MainComponent implements Runnable{
     private Texture texture;
     private TexturedModel staticModel;
     private Entity entity;
+    private Light light;
     private Camera camera;
 
     public void start() {
@@ -46,11 +47,11 @@ public class MainComponent implements Runnable{
         this.shader = new StaticShader();
         this.renderer = new Renderer(this.window, this.shader);
 
-        this.model = OBJLoader.loadObjModel("stall", this.loader);
-        System.out.println("Object Loaded");
-        this.texture = new Texture(this.loader.loadTexture("/textures/stallTexture.png"));
+        this.model = OBJLoader.loadObjModel("dragon", this.loader);
+        this.texture = new Texture(this.loader.loadTexture("/textures/blue.png"));
         this.staticModel = new TexturedModel(this.model, this.texture);
-        this.entity = new Entity(staticModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
+        this.entity = new Entity(staticModel, new Vector3f(0, -4, -25), 0, 0, 0, 1);
+        this.light = new Light(new engine.maths.Vector3f(0,0, -20), new engine.maths.Vector3f(1, 1, 1));
         this.camera = new Camera();
     }
 
@@ -75,9 +76,10 @@ public class MainComponent implements Runnable{
     }
 
     private void render() {
-        this.entity.increaseRotation(0,1,0);
+        this.entity.increaseRotation(0,1.0f,0);
         camera.move();
         this.shader.start();
+        this.shader.loadLight(light);
         this.shader.loadViewMatrix(camera);
         this.renderer.render(this.entity, this.shader);
         this.shader.stop();

@@ -20,11 +20,12 @@ public class Loader {
     private List<Integer> vbos = new ArrayList<>();
     private List<Integer> textures = new ArrayList<>();
 
-    public MeshModel loadToVAO(float[] positions, float[] textureCoords,int[] indices) {
+    public MeshModel loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
         int voaID = createVAO();
         this.bindIndicesBuffer(indices);
         this.storeDataInAttributeList(0, 3, positions);
         this.storeDataInAttributeList(1, 2, textureCoords);
+        this.storeDataInAttributeList(2, 3, normals);
         this.unbindVAO();
         return new MeshModel(voaID, indices.length);
     }
@@ -37,6 +38,12 @@ public class Loader {
             System.err.println("Can't find the texture at " + fileName);
         }
         this.textures.add(texture.getTextureID());
+        // fixing the texture
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D,GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+        //========================
         return texture.getTextureID();
     }
 

@@ -1,6 +1,7 @@
 package engine.shaders;
 
 import engine.entites.Camera;
+import engine.entites.Light;
 import engine.utils.Maths;
 import org.lwjglx.util.vector.Matrix4f;
 
@@ -11,6 +12,8 @@ public class StaticShader extends ShaderProgram{
     private int locationTransformationMatrix;
     private int locationProjectionMatrix;
     private int locationViewMatrix;
+    private int locationLightPosition;
+    private int locationLightColour;
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -20,6 +23,7 @@ public class StaticShader extends ShaderProgram{
     protected void bindAttributes() {
         super.bindAttribute(0, "position");
         super.bindAttribute(1, "textureCoords");
+        super.bindAttribute(2, "normal");
     }
 
     @Override
@@ -27,10 +31,17 @@ public class StaticShader extends ShaderProgram{
         this.locationTransformationMatrix = super.getUniformLocation("transformationMatrix");
         this.locationProjectionMatrix = super.getUniformLocation("projectionMatrix");
         this.locationViewMatrix = super.getUniformLocation("viewMatrix");
+        this.locationLightPosition = super.getUniformLocation("lightPosition");
+        this.locationLightColour = super.getUniformLocation("lightColour");
     }
 
     public void loadTransformationMatrix(Matrix4f matrix) {
         super.loadMatrix(this.locationTransformationMatrix, matrix);
+    }
+
+    public void loadLight(Light light) {
+        super.loadVector(this.locationLightPosition, light.getPosition());
+        super.loadVector(this.locationLightColour, light.getColour());
     }
 
     public void loadViewMatrix(Camera camera) {

@@ -9,12 +9,10 @@ import engine.io.Input;
 import engine.io.Window;
 
 import engine.models.TexturedModel;
+import engine.renderers.MasterRenderer;
+import engine.terrain.Terrain;
 import org.lwjgl.glfw.GLFW;
 import org.lwjglx.util.vector.Vector3f;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class MainComponent implements Runnable{
 
@@ -23,10 +21,14 @@ public class MainComponent implements Runnable{
     private Loader loader;
     private MasterRenderer renderer;
 
+    private Terrain terrain;
+    private Terrain terrain2;
+
     private MeshModel model;
     private TexturedModel staticModel;
     private Entity entity;
-    private List<Entity> allCubes;
+
+
     private Light light;
     private Camera camera;
 
@@ -40,24 +42,21 @@ public class MainComponent implements Runnable{
 
     private void init() {
         this.window = new Window();
-        this.window.setBackgroundColor(1.0f, 0.5f, 0.0f);
+        this.window.setBackgroundColor(0.0f, 0.0f, 0.0f);
         this.window.create();
         this.loader = new Loader();
         this.renderer = new MasterRenderer();
 
-        this.model = OBJLoader.loadObjModel("cube", this.loader);
-        this.staticModel = new TexturedModel(this.model, new Texture(this.loader.loadTexture("/textures/blue.png")));
-        this.allCubes = new ArrayList<>();
-        this.staticModel.getTexture().setShineDamper(100000);
-        this.staticModel.getTexture().setReflectivity(0);
-        Random random = new Random();
-        for(int i = 0; i < 200; i++) {
-            float x = random.nextFloat() * 100 - 50;
-            float y = random.nextFloat() * 100 - 50;
-            float z = random.nextFloat() * -300;
-            this.allCubes.add(new Entity(staticModel, new Vector3f(x, y, z), random.nextFloat() * 180f, random.nextFloat() * 180f, 0f, 1f));
-        }
-        this.light = new Light(new engine.maths.Vector3f(3000,2000, 3000), new engine.maths.Vector3f(1, 1, 1));
+        this.terrain = new Terrain(0, 0, this.loader, new Texture(this.loader.loadTexture("/textures/grass.png")));
+        this.terrain2 = new Terrain(1, 0, this.loader, new Texture(this.loader.loadTexture("/textures/grass.png")));
+
+        this.model = OBJLoader.loadObjModel("tree", this.loader);
+        this.staticModel = new TexturedModel(this.model, new Texture(this.loader.loadTexture("/textures/tree.png")));
+        this.entity = new Entity(this.staticModel, new Vector3f(0,-0,-25), 0,0,0,1);
+        this.staticModel.getTexture().setShineDamper(10);
+        this.staticModel.getTexture().setReflectivity(1);
+
+        this.light = new Light(new engine.maths.Vector3f(3000,2000, 2000), new engine.maths.Vector3f(1, 1, 1));
         this.camera = new Camera();
     }
 
@@ -67,7 +66,7 @@ public class MainComponent implements Runnable{
             this.update();
             this.render();
             if(Input.isKeyDown(GLFW.GLFW_KEY_F11)) {
-                window.setFullScreen(!window.isFullScreen());
+                this.window.setFullScreen(!window.isFullScreen());
             }
         }
         this.close();
@@ -82,11 +81,14 @@ public class MainComponent implements Runnable{
     }
 
     private void render() {
-        camera.move();
-        for(Entity cube : this.allCubes) {
-            this.renderer.processEntity(cube);
-        }
-        this.renderer.render(light, camera);
+        this.entity.increaseRotation(0,1,0);
+        this.camera.move();
+
+        this.renderer.processTerrain(this.terrain);
+        this.renderer.processTerrain(this.terrain2);
+        this.renderer.processEntity(this.entity);
+
+        this.renderer.render(this.light, this.camera);
         this.window.swapBuffers();
     }
 

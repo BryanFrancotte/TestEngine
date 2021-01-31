@@ -44,12 +44,16 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(2);
 
         Texture texture = model.getTexture();
+        if(texture.hasTransparency()) {
+            MasterRenderer.disableCulling(); // TODO: heritage with MasterRenderer?
+        }
         this.shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL30.GL_TEXTURE_2D, model.getTexture().getTextureID());
     }
 
     private void unbidTextureModel(){
+        MasterRenderer.enableCulling();
         GL20.glDisableVertexAttribArray(0);
         GL20.glDisableVertexAttribArray(1);
         GL20.glDisableVertexAttribArray(2);

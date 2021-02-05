@@ -14,6 +14,10 @@ import engine.terrain.Terrain;
 import org.lwjgl.glfw.GLFW;
 import org.lwjglx.util.vector.Vector3f;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class MainComponent implements Runnable{
 
     private Thread gameEngine;
@@ -26,7 +30,10 @@ public class MainComponent implements Runnable{
 
     private MeshModel model;
     private TexturedModel staticModel;
-    private Entity entity;
+    private TexturedModel treeModel;
+    private TexturedModel grassModel;
+    private List<Entity> entities;
+//    private Entity entity;
 
 
     private Light light;
@@ -52,7 +59,19 @@ public class MainComponent implements Runnable{
 
         this.model = OBJLoader.loadObjModel("tree", this.loader);
         this.staticModel = new TexturedModel(this.model, new Texture(this.loader.loadTexture("/textures/tree.png")));
-        this.entity = new Entity(this.staticModel, new Vector3f(0,-0,-25), 0,0,0,1);
+        this.treeModel = new TexturedModel(OBJLoader.loadObjModel("tree", this.loader), new Texture(this.loader.loadTexture("/textures/tree.png")));
+        this.grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", this.loader), new Texture(this.loader.loadTexture("/textures/grassTexture.png")));
+        this.grassModel.getTexture().setHasTransparency(true);
+        this.grassModel.getTexture().setUseFakeLighting(true);
+
+        this.entities = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 500; i++) {
+            entities.add(new Entity(this.treeModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
+            entities.add(new Entity(this.grassModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0,1));
+        }
+
+//        this.entity = new Entity(this.staticModel, new Vector3f(0,-0,-25), 0,0,0,1);
         this.staticModel.getTexture().setShineDamper(10);
         this.staticModel.getTexture().setReflectivity(1);
 
@@ -81,12 +100,15 @@ public class MainComponent implements Runnable{
     }
 
     private void render() {
-        this.entity.increaseRotation(0,1,0);
+//        this.entity.increaseRotation(0,1,0);
         this.camera.move();
 
         this.renderer.processTerrain(this.terrain);
         this.renderer.processTerrain(this.terrain2);
-        this.renderer.processEntity(this.entity);
+//        this.renderer.processEntity(this.entity);
+        for(Entity entity : this.entities) {
+            this.renderer.processEntity(entity);
+        }
 
         this.renderer.render(this.light, this.camera);
         this.window.swapBuffers();

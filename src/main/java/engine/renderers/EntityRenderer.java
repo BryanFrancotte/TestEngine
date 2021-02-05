@@ -47,6 +47,7 @@ public class EntityRenderer {
         if(texture.hasTransparency()) {
             MasterRenderer.disableCulling(); // TODO: heritage with MasterRenderer?
         }
+        this.shader.loadFakeLighting(texture.useFakeLighting());
         this.shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL30.GL_TEXTURE_2D, model.getTexture().getTextureID());

@@ -1,7 +1,7 @@
 package engine.renderers;
 
 import engine.entites.Entity;
-import engine.graphics.Texture;
+import engine.Textures.ModelTexture;
 import engine.models.TexturedModel;
 import engine.shaders.StaticShader;
 import engine.utils.Maths;
@@ -43,12 +43,12 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        Texture texture = model.getTexture();
-        if(texture.hasTransparency()) {
+        ModelTexture modelTexture = model.getTexture();
+        if(modelTexture.hasTransparency()) {
             MasterRenderer.disableCulling(); // TODO: heritage with MasterRenderer?
         }
-        this.shader.loadFakeLighting(texture.useFakeLighting());
-        this.shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
+        this.shader.loadFakeLighting(modelTexture.useFakeLighting());
+        this.shader.loadShineVariables(modelTexture.getShineDamper(), modelTexture.getReflectivity());
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GL11.glBindTexture(GL30.GL_TEXTURE_2D, model.getTexture().getTextureID());
     }

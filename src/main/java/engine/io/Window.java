@@ -15,7 +15,7 @@ public class Window {
     private String title;
     private long glfwWindow;
 
-    private Vector3f background = new Vector3f(0, 0, 0);
+    private Vector3f background = new Vector3f(0.5f, 0.5f, 0.5f);
 
     private GLFWWindowSizeCallback sizeCallback;
     private boolean isResized;
@@ -107,7 +107,7 @@ public class Window {
             GL11.glViewport(0,0, width, height);
             this.isResized = false;
         }
-        GL11.glClearColor(this.background.getX(), this.background.getY(), this.background.getZ(), 1.0f);
+        GL11.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GLFW.glfwPollEvents();
         this.frames++;
@@ -123,34 +123,34 @@ public class Window {
     }
 
     public void setBackgroundColor(float red, float green, float blue) {
-        this.background.set(red, green, blue);
-    }
-
-    public boolean shouldClose() {
-        return GLFW.glfwWindowShouldClose(this.glfwWindow);
-    }
-
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public boolean isFullScreen() {
-        return this.isFullScreen;
-    }
-
-    public void setFullScreen(boolean isFullScreen) {
-        this.isFullScreen = isFullScreen;
-        this.isResized = true;
-        if(this.isFullScreen) {
-            GLFW.glfwGetWindowPos(this.glfwWindow, this.windowPosX, this.windowPosY);
-            GLFW.glfwSetWindowMonitor(this.glfwWindow, GLFW.glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
-        } else {
-            GLFW.glfwSetWindowMonitor(this.glfwWindow, NULL, this.windowPosX[0], this.windowPosY[0], width, height, 0);
+            this.background.set(red, green, blue);
         }
+
+        public boolean shouldClose() {
+            return GLFW.glfwWindowShouldClose(this.glfwWindow);
+        }
+
+        public int getWidth() {
+            return this.width;
+        }
+
+        public int getHeight() {
+            return this.height;
+        }
+
+        public boolean isFullScreen() {
+            return this.isFullScreen;
+        }
+
+        public void setFullScreen(boolean isFullScreen) {
+            this.isFullScreen = isFullScreen;
+            this.isResized = true;
+            if(this.isFullScreen) {
+                GLFW.glfwGetWindowPos(this.glfwWindow, this.windowPosX, this.windowPosY);
+                GLFW.glfwSetWindowMonitor(this.glfwWindow, GLFW.glfwGetPrimaryMonitor(), 0, 0, width, height, 0);
+            } else {
+                GLFW.glfwSetWindowMonitor(this.glfwWindow, NULL, this.windowPosX[0], this.windowPosY[0], width, height, 0);
+            }
     }
 
     public void destroy() {

@@ -1,21 +1,21 @@
 package engine.models;
 
-import engine.graphics.Texture;
+import engine.Textures.ModelTexture;
 
 public class TexturedModel {
     private MeshModel meshModel;
-    private Texture texture;
+    private ModelTexture modelTexture;
 
-    public TexturedModel(MeshModel meshModel, Texture texture) {
+    public TexturedModel(MeshModel meshModel, ModelTexture modelTexture) {
         this.meshModel = meshModel;
-        this.texture = texture;
+        this.modelTexture = modelTexture;
     }
 
     public MeshModel getMeshModel() {
         return meshModel;
     }
 
-    public Texture getTexture() {
-        return texture;
+    public ModelTexture getTexture() {
+        return modelTexture;
     }
 }

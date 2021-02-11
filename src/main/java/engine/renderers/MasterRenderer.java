@@ -22,6 +22,7 @@ public class MasterRenderer {
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000.0f;
 
+
     private Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
@@ -52,11 +53,13 @@ public class MasterRenderer {
 
     public void render(Light light, Camera camera) {
         this.shader.start();
+        this.shader.loadSkyColour(0.5f, 0.5f, 0.5f);
         this.shader.loadLight(light);
         this.shader.loadViewMatrix(camera);
         this.entityRenderer.render(this.entities);
         this.shader.stop();
         this.terrainShader.start();
+        this.terrainShader.loadSkyColour(0.5f, 0.5f, 0.5f);
         this.terrainShader.loadLight(light);
         this.terrainShader.loadViewMatrix(camera);
         this.terrainRenderer.render(terrains);

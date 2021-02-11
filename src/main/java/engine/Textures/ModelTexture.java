@@ -1,6 +1,6 @@
-package engine.graphics;
+package engine.Textures;
 
-public class Texture {
+public class ModelTexture {
     private int textureID;
 
     private float shineDamper = 1;
@@ -9,7 +9,7 @@ public class Texture {
     private boolean hasTransparency = false;
     private boolean useFakeLighting = false;
 
-    public Texture(int textureID) {
+    public ModelTexture(int textureID) {
         this.textureID = textureID;
     }
 

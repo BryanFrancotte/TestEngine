@@ -1,7 +1,9 @@
 package engine.terrain;
 
+import engine.Textures.TerrainTexture;
+import engine.Textures.TerrainTexturePack;
 import engine.graphics.Loader;
-import engine.graphics.Texture;
+import engine.Textures.ModelTexture;
 import engine.models.MeshModel;
 
 public class Terrain {
@@ -11,10 +13,12 @@ public class Terrain {
     private float x;
     private float z;
     private MeshModel model;
-    private Texture texture;
+    private TerrainTexturePack texturePack;
+    private TerrainTexture blendMap;
 
-    public Terrain(int gridX, int gridZ, Loader loader, Texture texture) {
-        this.texture = texture;
+    public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap) {
+        this.texturePack = texturePack;
+        this.blendMap = blendMap;
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
         this.model = this.generateTerrain(loader);
@@ -32,8 +36,12 @@ public class Terrain {
         return this.model;
     }
 
-    public Texture getTexture() {
-        return this.texture;
+    public TerrainTexturePack getTexturePack() {
+        return this.texturePack;
+    }
+
+    public TerrainTexture getBlendMap() {
+        return this.blendMap;
     }
 
     private MeshModel generateTerrain(Loader loader) {

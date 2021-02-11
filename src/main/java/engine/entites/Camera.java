@@ -11,10 +11,10 @@ public class Camera {
     private float roll;
 
     public void move() {
-        if(Input.isKeyDown(GLFW.GLFW_KEY_W)) { this.position.z -= 0.2f; }
-        if(Input.isKeyDown(GLFW.GLFW_KEY_S)) { this.position.z += 0.2f; }
-        if(Input.isKeyDown(GLFW.GLFW_KEY_D)) { this.position.x += 0.2f; }
-        if(Input.isKeyDown(GLFW.GLFW_KEY_A)) { this.position.x -= 0.2f; }
+        if(Input.isKeyDown(GLFW.GLFW_KEY_W)) { this.position.z -= 0.5f; }
+        if(Input.isKeyDown(GLFW.GLFW_KEY_S)) { this.position.z += 0.5f; }
+        if(Input.isKeyDown(GLFW.GLFW_KEY_D)) { this.position.x += 0.5f; }
+        if(Input.isKeyDown(GLFW.GLFW_KEY_A)) { this.position.x -= 0.5f; }
         if(Input.isKeyDown(GLFW.GLFW_KEY_SPACE)) { this.position.y += 0.2f; }
         if(Input.isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL)) { this.position.y -= 0.2f; }
 

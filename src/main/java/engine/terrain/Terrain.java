@@ -1,9 +1,8 @@
 package engine.terrain;
 
-import engine.Textures.TerrainTexture;
-import engine.Textures.TerrainTexturePack;
+import engine.textures.TerrainTexture;
+import engine.textures.TerrainTexturePack;
 import engine.graphics.Loader;
-import engine.Textures.ModelTexture;
 import engine.models.MeshModel;
 
 public class Terrain {

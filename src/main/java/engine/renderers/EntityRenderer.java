@@ -1,7 +1,7 @@
 package engine.renderers;
 
 import engine.entites.Entity;
-import engine.Textures.ModelTexture;
+import engine.textures.ModelTexture;
 import engine.models.TexturedModel;
 import engine.shaders.StaticShader;
 import engine.utils.Maths;

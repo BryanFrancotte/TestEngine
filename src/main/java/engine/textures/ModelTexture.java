@@ -1,4 +1,4 @@
-package engine.Textures;
+package engine.textures;
 
 public class ModelTexture {
     private int textureID;

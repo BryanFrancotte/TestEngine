@@ -1,8 +1,8 @@
 package Main;
 
-import engine.Textures.ModelTexture;
-import engine.Textures.TerrainTexture;
-import engine.Textures.TerrainTexturePack;
+import engine.textures.ModelTexture;
+import engine.textures.TerrainTexture;
+import engine.textures.TerrainTexturePack;
 import engine.entites.Camera;
 import engine.entites.Entity;
 import engine.entites.Light;

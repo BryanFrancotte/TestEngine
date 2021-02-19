@@ -1,8 +1,6 @@
 package engine.renderers;
 
-import engine.Textures.ModelTexture;
-import engine.Textures.TerrainTexture;
-import engine.Textures.TerrainTexturePack;
+import engine.textures.TerrainTexturePack;
 import engine.shaders.TerrainShader;
 import engine.terrain.Terrain;
 import engine.utils.Maths;

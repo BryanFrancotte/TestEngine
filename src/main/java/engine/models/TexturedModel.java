@@ -1,6 +1,6 @@
 package engine.models;
 
-import engine.Textures.ModelTexture;
+import engine.textures.ModelTexture;
 
 public class TexturedModel {
     private MeshModel meshModel;
